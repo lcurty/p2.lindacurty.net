@@ -22,11 +22,18 @@
       <input type="password" name="password" id="password" size="38" value="" class="text-input" />
     </p>
     <p>
-    	Gender<br />
-      <input type="radio" name="gender" id="male" value="male"><label for="male" id="male_label">Male</label>
-      <input type="radio" name="gender" id="female" value="female"><label for="female" id="female_label">Female</label>
+      <label for="male" id="male_label">Male</label><input type="radio" name="gender" id="male" value="male"><br />
+      <label for="female" id="female_label">Female</label><input type="radio" name="gender" id="female" value="female">
     </p>
     <p>Insert Photo Upload</p>
     <p class="center"><input type="submit" class="button" id="submit_btn" value="Sign Up" /></p>
   </fieldset>  
 </form>
+
+<!-- Switch to Sign up Form -->
+<div id="switch-link">
+  <p>
+    <a href="/users/login">I have an account ...<br />
+    log me in!</a>
+  </p>
+</div>

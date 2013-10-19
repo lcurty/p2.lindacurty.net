@@ -6,7 +6,8 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />	
 
 	<!-- Global JS/CSS -->
-	<link href="../css/styles.css" rel="stylesheet" type="text/css" media="all">				
+	<link href='http://fonts.googleapis.com/css?family=Cherry+Swash:400,700' rel='stylesheet' type='text/css'>
+  <link href="../css/styles.css" rel="stylesheet" type="text/css" media="all">	
 
 	<!-- Controller Specific JS/CSS -->
 	<?php if(isset($client_files_head)) echo $client_files_head; ?>
@@ -21,8 +22,7 @@
   <?php if($user): ?><div id="logged_in"><?php else: ?><div id="logged_out"><?php endif; ?>
     <div id="outer">
       <div id="page">
-        <div id='menu'>
-      
+        <nav>
             <a href='/'>Home</a>
       
             <!-- Menu for users who are logged in -->
@@ -38,8 +38,13 @@
                 <a href='/users/login'>Log in</a>
       
             <?php endif; ?>
-      
-        </div>
+      			<hr class="clear">
+        </nav>
+        
+      	<header>
+        	<img src="../images/chuck-logo.png">
+          <hr class="clear">
+        </header>
   
         <?php if(isset($content)) echo $content; ?>
       

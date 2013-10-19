@@ -1,3 +1,4 @@
+<!-- Login Form -->
 <form method='POST' name='login_form' action='/users/p_login'> 
   <fieldset>
   	<legend>Login</legend>
@@ -12,3 +13,11 @@
     <p class="center"><input type="submit" class="button" id="submit_btn" value="Login" /></p>
   </fieldset>  
 </form>
+
+<!-- Switch to Sign up Form -->
+<div id="switch-link">
+  <p>
+  	<a href="/users/signup">I want to join ...<br />
+  	sign me up!</a>
+  </p>
+</div>

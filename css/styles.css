@@ -47,19 +47,75 @@ body {
 	border-radius: 15px;
 }
 
+#logged_in .clear {
+	clear: both;
+	visibility: hidden;
+	margin: 2px;
+}
 
-#menu {
+#logged_out .clear {
+	visibility: hidden;
+}
+
+/* Header */
+
+header {
+}
+
+header img {
+	float: left;
+	margin: -10px 20px 5px 5px;	
+}
+
+/* Forms */
+form {
+	width:300px;
+}
+
+fieldset {
+	margin: auto 5px;
+	border: 0px;
+}
+
+legend {
+	font-family: 'Cherry Swash', cursive;
+	font-size: 1.3em;
+	font-weight: bold;
+  text-shadow: 1px 1px 0px #d1d1d1;
+}
+
+label {
+	font-family: 'Cherry Swash', cursive;
+	font-size: .9em;
+	font-weight: bold;
+  text-shadow: 1px 1px 0px #d1d1d1;
+}
+
+#switch-link {
+	font-family: 'Cherry Swash', cursive;
+	font-size: 3em;
+	font-weight: bold;
+  text-shadow: 1px 1px 0px #d1d1d1;
+	float: right;
+	text-decoration: none;
+	color: #514c49;
+}
+
+/* Navigation */
+nav {
 	float: right;
 	margin: -20px 0px;
 }
 
-#menu,
-#menu a:link, 
-#menu a:visited, 
-#menu a:hover, 
-#menu a:active {
+nav, nav a {
 	font-size: .9em;
-	color: #8f8d82;
-	text-decoration: none;
+	color: #514c49;
 	padding-right: 5px;
+}
+
+/* Links */
+
+a:link, a:visited, a:hover, a:active {
+	color: #514c49;
+	text-decoration: none;
 }
