@@ -2,12 +2,12 @@
   <fieldset>
   	<legend>Sign Up</legend>
     <p>
-      <label for="first_name" id="first_name_label">First Name</label><br />
-      <input type="text" name="first_name" id="first_name" size="38" value=""/>
+      <label for="first_name" id="first_name_label">First Name*</label><br />
+      <input type="text" name="first_name" id="first_name" size="38" required="required" value=""/>
     </p>
     <p>
-      <label for="last_name" id="last_name_label">Last Name</label><br />
-      <input type="text" name="last_name" id="last_name" size="38" value="" />
+      <label for="last_name" id="last_name_label">Last Name*</label><br />
+      <input type="text" name="last_name" id="last_name" size="38" required="required" value="" />
     </p>
     <p>
       <label for="email" id="email_label">Email*</label><br />

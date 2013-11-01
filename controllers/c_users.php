@@ -33,18 +33,16 @@
 		$_POST['token'] = sha1(TOKEN_SALT.$_POST['email'].Utils::generate_random_string());
 			
 		# This is the directory where images will be saved
-		$filename = $_POST['profile_image'].$_POST['first_name'].$_POST['last_name'];
-		$target = "pics/".$filename;
+		$target = "pics/";
+		$target = $target.basename($_FILES['profile_image']['last_name']);
 
-//This gets all the other information from the form
-//$Filename=basename( $_FILES['Filename']['name']);
-//$Description=$_POST['Description'];
+		# This gets all the other information from the form
+		$_POST['profile_image'] = basename( $_FILES['profile_image']['last_name']);
 
 		# Writes the Filename to the server
-		if(move_uploaded_file($_POST['profile_image'], $target)) {
+		if(move_uploaded_file($_FILES['profile_image']['last_name'], $target)) {
 
 			# Insert this user into the database
-			$profile_image = $filename;
 			$user_id = DB::instance(DB_NAME)->insert('users', $_POST);
 	
 			# Send them to the main page
