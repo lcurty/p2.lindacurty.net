@@ -19,11 +19,12 @@
 				$this->template->content = View::instance('v_posts_index');
 				$this->template->title   = "All Posts";
 		
-				# Query
+				# Query posts
 				$q = 'SELECT 
 								posts.content,
 								posts.created,
 								posts.user_id AS post_user_id,
+								posts.post_id,
 								users_users.user_id AS follower_id,
 								users.first_name,
 								users.last_name
@@ -34,18 +35,33 @@
 								ON posts.user_id = users.user_id
 						WHERE users_users.user_id = '.$this->user->user_id.' OR posts.user_id = '.$this->user->user_id;
 		
-				# Run the query, store the results in the variable $posts
+				# Run posts query, store the results in the variable $posts
 				$posts = DB::instance(DB_NAME)->select_rows($q);
 		
+				# Query comments
+				$q = 'SELECT 
+								comments.comment,
+								comments.created,
+								comments.post_id,
+								users.first_name,
+								users.last_name
+						FROM comments
+								LEFT JOIN posts ON comments.post_id = posts.post_id
+								LEFT JOIN users ON comments.user_id = users.user_id';
+		
+				# Run the query, store the results in the variable $comments
+				$comments = DB::instance(DB_NAME)->select_rows($q);
+
 				# Pass data to the View
 				$this->template->content->posts = $posts;
+				$this->template->content->comments = $comments;
 		
 				# Render the View
 				echo $this->template;
 			
 			}
 				
-			public function add() {
+			/*public function add() {
 	
 					# Setup view
 					$this->template->content = View::instance('v_posts_add');
@@ -54,7 +70,7 @@
 					# Render template
 					echo $this->template;
 	
-			}
+			}*/
 	
 			public function p_add() {
 	
@@ -65,16 +81,31 @@
 					$_POST['created']  = Time::now();
 					$_POST['modified'] = Time::now();
 	
-					# Insert
-					# Note we didn't have to sanitize any of the $_POST data because we're using the insert method which does it for us
+					# Insert to database
 					DB::instance(DB_NAME)->insert('posts', $_POST);
 	
-					# Quick and dirty feedback
+					# Redirect after insert
 					Router::redirect("/posts");
 	
 			}
 			
-			
+			public function p_comment() {
+	
+					# Associate this comment with this user
+					$_POST['user_id']  = $this->user->user_id;
+	
+					# Unix timestamp of when this comment was created / modified
+					$_POST['created']  = Time::now();
+					$_POST['modified'] = Time::now();
+	
+					# Insert to database
+					DB::instance(DB_NAME)->insert('comments', $_POST);
+	
+					# Redirect after insert
+					Router::redirect("/posts");
+	
+			}
+
 			public function users() {
                 
                 # Set up view

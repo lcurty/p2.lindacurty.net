@@ -153,6 +153,21 @@ article {
 	border-radius: 10px;
 }
 
+.comment_by{
+	margin-bottom: 3px;
+	font-family: 'Cherry Swash', cursive;
+	font-size: .9em;
+	font-weight: bold;
+  text-shadow: 1px 1px 0px #d1d1d1;
+}
+
+.post_comment {
+	background-color: #CAFFCA;
+	padding: 1px 15px 15px 15px;
+	font-size: 0.9em;
+	border-radius: 10px;
+}
+
 article time {
 	font-size: .7em;
 	font-style: italic;
