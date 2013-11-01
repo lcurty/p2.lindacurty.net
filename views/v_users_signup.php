@@ -21,10 +21,6 @@
       <label for="password" id="password_label">Password*</label><br />
       <input type="password" name="password" id="password" size="38" required="required" value="" />
     </p>
-    <!--<p>
-      <label for="male" id="male_label">Male</label><input type="radio" name="gender" id="male" value="male"><br />
-      <label for="female" id="female_label">Female</label><input type="radio" name="gender" id="female" value="female">
-    </p>-->
     <p>
       <label for="profile_image" id="image_label">Upload Photo</label><br />
       <input type="file" name="profile_image" id="profile_image" size="38" value="" />

@@ -25,20 +25,38 @@
 	
 	public function p_signup() {
 		# More data we want stored with the user
-			$_POST['created']  = Time::now();
-			$_POST['modified'] = Time::now();       
+		$_POST['created']  = Time::now();
+		$_POST['modified'] = Time::now();       
 		
-		# Encrypt the password  
-			$_POST['password'] = sha1(PASSWORD_SALT.$_POST['password']);            
+		# Encrypt and salt the password  
+		$_POST['password'] = sha1(PASSWORD_SALT.$_POST['password']);            
+		$_POST['token'] = sha1(TOKEN_SALT.$_POST['email'].Utils::generate_random_string());
+			
+		# This is the directory where images will be saved
+		$filename = $_POST['profile_image'].$_POST['first_name'].$_POST['last_name'];
+		$target = "pics/".$filename;
 
-		# Create an encrypted token via their email address and a random string
-			$_POST['token'] = sha1(TOKEN_SALT.$_POST['email'].Utils::generate_random_string());
-	
-		# Insert this user into the database
+//This gets all the other information from the form
+//$Filename=basename( $_FILES['Filename']['name']);
+//$Description=$_POST['Description'];
+
+		# Writes the Filename to the server
+		if(move_uploaded_file($_POST['profile_image'], $target)) {
+
+			# Insert this user into the database
+			$profile_image = $filename;
 			$user_id = DB::instance(DB_NAME)->insert('users', $_POST);
-
-		# Send them to the main page
+	
+			# Send them to the main page
 			Router::redirect("/users/login");
+
+		} else {
+			
+			#Gives and error if its not
+			echo "Sorry, there was a problem uploading your file.";
+			echo "<pre>".print_r($_FILES)."</pre>";
+		}
+
 	}
 
 	public function login($error = NULL) {
