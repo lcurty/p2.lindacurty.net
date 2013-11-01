@@ -1,7 +1,7 @@
-<form method='POST' action='/posts/p_add'>
+<form class='addPost' method='POST' action='/posts/p_add'>
 
     <p><label for='content'>New Post:</label><br>
-    <textarea name='content' id='content'></textarea></p>
+    <textarea name='content' id='content' cols='60'></textarea></p>
     <p><input type='submit' value='New post'></p>
 
 </form> 

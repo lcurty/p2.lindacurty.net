@@ -1,15 +1,21 @@
+<?php include 'v_posts_add.php' ?>
+
 <?php foreach($posts as $post): ?>
 
 <article>
 
-    <h1><?=$post['first_name']?> <?=$post['last_name']?> posted:</h1>
+    <p class="posted_by"><?=$post['first_name']?> <?=$post['last_name']?></p>
 
-    <p><?=$post['content']?></p>
-
-    <time datetime="<?=Time::display($post['created'],'Y-m-d G:i')?>">
-        <?=Time::display($post['created'])?>
-    </time>
-
+    <div class="user_post">
+    
+      <p><?=$post['content']?></p>
+  
+      <time datetime="<?=Time::display($post['created'],'Y-m-d G:i')?>">
+          <?=Time::display($post['created'])?>
+      </time>
+    
+    </div>
+    
 </article>
 
 <?php endforeach; ?>

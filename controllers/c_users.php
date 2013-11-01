@@ -41,16 +41,20 @@
 			Router::redirect("/users/login");
 	}
 
-	public function login() {
+	public function login($error = NULL) {
 		# Setup view
 			$this->template->content = View::instance('v_users_login');
 			$this->template->title   = "Login";
+			
+		# Pass data to the view
+		$this->template->content->error = $error;
 
 		# Render template
 			echo $this->template;
 	}
 	
 	public function p_login() {
+		
 		# Sanitize the user entered data to prevent any funny-business (re: SQL Injection Attacks)
 			$_POST = DB::instance(DB_NAME)->sanitize($_POST);
 	
@@ -66,28 +70,14 @@
 	
 			$token = DB::instance(DB_NAME)->select_field($q);
 	
-		# If we didn't find a matching token in the database, it means login failed
-			if(!$token) {
-	
-			# Send them back to the login page
-				Router::redirect("/users/login");
-	
-		# But if we did, login succeeded! 
-			} else {
-	
-			/* 
-			Store this token in a cookie using setcookie()
-			Important Note: *Nothing* else can echo to the page before setcookie is called
-			Not even one single white space.
-			param 1 = name of the cookie
-			param 2 = the value of the cookie
-			param 3 = when to expire
-			param 4 = the path of the cooke (a single forward slash sets it for the entire domain)
-			*/
-				setcookie("token", $token, strtotime('+1 year'), '/');
-
-			# Send them to the main page
-				Router::redirect("/index");
+		# Login failed
+    if(!$token) {
+        Router::redirect("/users/login/error");
+    }
+    # Login passed
+    else {
+        setcookie("token", $token, strtotime('+2 weeks'), '/');
+				Router::redirect("/");
 	
 			}
 	}

@@ -7,7 +7,7 @@
 
 	<!-- Global JS/CSS -->
 	<link href='http://fonts.googleapis.com/css?family=Cherry+Swash:400,700' rel='stylesheet' type='text/css'>
-  <link href="../css/styles.css" rel="stylesheet" type="text/css" media="all">	
+  <link href="/css/styles.css" rel="stylesheet" type="text/css" media="all">	
 
 	<!-- Controller Specific JS/CSS -->
 	<?php if(isset($client_files_head)) echo $client_files_head; ?>
@@ -30,6 +30,7 @@
       
                 <a href='/users/logout'>Logout</a>
                 <a href='/users/profile'>Profile</a>
+                <a href='/posts/users'>Users</a>
       
             <!-- Menu options for users who are not logged in -->
             <?php else: ?>
@@ -42,8 +43,8 @@
         </nav>
         
       	<header>
-        	<img src="../images/chuck-logo.png">
-          <hr class="clear">
+        	<img src="/images/chuck-logo.png">
+          
         </header>
   
         <?php if(isset($content)) echo $content; ?>
