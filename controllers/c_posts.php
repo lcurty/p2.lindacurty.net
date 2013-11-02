@@ -33,7 +33,9 @@
 								ON posts.user_id = users_users.user_id_followed
 						INNER JOIN users 
 								ON posts.user_id = users.user_id
-						WHERE users_users.user_id = '.$this->user->user_id.' OR posts.user_id = '.$this->user->user_id;
+						WHERE users_users.user_id = '.$this->user->user_id.' OR posts.user_id = '.$this->user->user_id.'
+						ORDER BY posts.created DESC';
+						
 		
 				# Run posts query, store the results in the variable $posts
 				$posts = DB::instance(DB_NAME)->select_rows($q);
@@ -51,10 +53,21 @@
 		
 				# Run the query, store the results in the variable $comments
 				$comments = DB::instance(DB_NAME)->select_rows($q);
+		
+				# Count of comments per post - used for styling
+				$q = 'SELECT post_id, comment_id, count( post_id )
+							FROM comments
+							GROUP BY post_id';
+		
+				# Run the query, store the results in the variable $comment_count
+				$comment_count = DB::instance(DB_NAME)->select_rows($q);
+				
+				
 
 				# Pass data to the View
 				$this->template->content->posts = $posts;
 				$this->template->content->comments = $comments;
+				$this->template->content->comment_count = $comment_count;
 		
 				# Render the View
 				echo $this->template;

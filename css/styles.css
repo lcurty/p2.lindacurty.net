@@ -52,7 +52,8 @@ body {
 	border-radius: 15px;
 }
 
-#logged_in .clear {
+#logged_in .clear,
+hr .clear {
 	clear: both;
 	visibility: hidden;
 	margin: 2px;
@@ -134,8 +135,11 @@ form.addPost {
 }
 
 article {
-	margin: 10px 10px 10px 50px;
-	clear: both;
+	margin: 10px 10px 10px 10px;
+}
+
+article .posts {
+	margin-left: 50px;
 }
 
 .posted_by{
@@ -168,11 +172,22 @@ article {
 	border-radius: 10px;
 }
 
+.has_comment {
+	width: 52%;
+	float: left;
+}
+
+.comment_box {
+	margin-top: 30px;
+	float: right;
+	width: 45%;
+}
+
 article time {
 	font-size: .7em;
 	font-style: italic;
-	float: right;
 	margin-top: -5px;
+	float: right;
 }
 
 /* User List */
