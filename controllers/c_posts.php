@@ -46,7 +46,8 @@
 								comments.created,
 								comments.post_id,
 								users.first_name,
-								users.last_name
+								users.last_name,
+								users.profile_image
 						FROM comments
 								LEFT JOIN posts ON comments.post_id = posts.post_id
 								LEFT JOIN users ON comments.user_id = users.user_id';
@@ -73,17 +74,6 @@
 			
 			}
 				
-			/*public function add() {
-	
-					# Setup view
-					$this->template->content = View::instance('v_posts_add');
-					$this->template->title   = "New Post";
-	
-					# Render template
-					echo $this->template;
-	
-			}*/
-	
 			public function p_add() {
 	
 					# Associate this post with this user

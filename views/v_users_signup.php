@@ -3,27 +3,23 @@
   	<legend>Sign Up</legend>
     <p>
       <label for="first_name" id="first_name_label">First Name*</label><br />
-      <input type="text" name="first_name" id="first_name" size="38" required="required" value=""/>
+      <input type="text" name="first_name" id="first_name" size="38" required="required" message="Please enter a first name." />
     </p>
     <p>
-      <label for="last_name" id="last_name_label">Last Name*</label><br />
-      <input type="text" name="last_name" id="last_name" size="38" required="required" value="" />
+      <label for="last_name" id="last_name_label">Last Name</label><br />
+      <input type="text" name="last_name" id="last_name" size="38" />
     </p>
     <p>
       <label for="email" id="email_label">Email*</label><br />
-      <input type="text" name="email" id="email" size="38" required="required" value="" />
-    </p>
-    <p>
-      <label for="username" id="username_label">Username*</label><br />
-      <input type="text" name="username" id="username" size="38" required="required" value="" />
+      <input type="text" name="email" id="email" size="38" required="required" message="Please enter a valid email address."  />
     </p>
     <p>
       <label for="password" id="password_label">Password*</label><br />
-      <input type="password" name="password" id="password" size="38" required="required" value="" />
+      <input type="password" name="password" id="password" size="38" required="required" message="Please enter a password." />
     </p>
     <p>
       <label for="profile_image" id="image_label">Upload Photo</label><br />
-      <input type="file" name="profile_image" id="profile_image" size="38" value="" />
+      <input type="file" name="profile_image" id="profile_image" size="38" />
     </p>
     <p class="center"><input type="submit" class="button" id="submit_btn" value="Sign Up" /></p>
     <p class="note">* Required

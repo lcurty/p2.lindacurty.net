@@ -90,7 +90,7 @@ legend {
   text-shadow: 1px 1px 0px #d1d1d1;
 }
 
-label {
+label, .label {
 	font-family: 'Cherry Swash', cursive;
 	font-size: .9em;
 	font-weight: bold;
@@ -193,11 +193,25 @@ article time {
 	float: right;
 }
 
+.my_photo {
+	float: right;
+	text-align: center;
+	margin: 30px 200px 5px 20px;
+}
+
+/* Profile Images */
+
 .circular {
 	border-radius: 150px;
 	-webkit-border-radius: 150px;
 	-moz-border-radius: 150px;
 	border: 1px solid #bfbdb2;
+}
+
+.my_photo .circular {
+	width: 150px;
+	height: 150px;
+	margin: 10px;
 }
 
 .posts .circular {

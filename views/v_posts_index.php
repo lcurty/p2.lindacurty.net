@@ -9,8 +9,8 @@
   <article class="posts<?php foreach($has_comment AS $show_comments): ?><?php if($show_comments['post_id'] == $post['post_id']): ?> has_comment<?php endif ?><?php endforeach; ?>">
 
 			<div>
-				<?php if(isset($comment['profile_image'])): ?>
-        	<img class="circular" src="../images/profile/<?=$comment['profile_image']?>" />
+				<?php if(isset($post['profile_image']) && (!$post['profile_image'] == "")): ?>
+        	<img class="circular" src="../images/profile/<?=$post['profile_image']?>" />
         <?php else: ?>
         	<img class="circular" src="../images/profile/stick-figure.jpg" />
         <?php endif; ?>
@@ -48,7 +48,7 @@
             <article class="comments">
             
             <div>
-              <?php if(isset($comment['profile_image'])): ?>
+              <?php if(isset($comment['profile_image']) && (!$comment['profile_image'] == "")): ?>
                 <img class="circular" src="../images/profile/<?=$comment['profile_image']?>" />
               <?php else: ?>
                 <img class="circular" src="../images/profile/stick-figure.jpg" />

@@ -46,44 +46,44 @@
 		
 		# Check Image Restrictions
 		if ((($_FILES["profile_image"]["type"] == "image/gif")
-		|| ($_FILES["profile_image"]["type"] == "image/jpeg")
-		|| ($_FILES["profile_image"]["type"] == "image/jpg")
-		|| ($_FILES["profile_image"]["type"] == "image/pjpeg")
-		|| ($_FILES["profile_image"]["type"] == "image/x-png")
-		|| ($_FILES["profile_image"]["type"] == "image/png"))
-		&& ($_FILES["profile_image"]["size"] < 1000000)
-		&& in_array($extension, $allowedExts))
-			{
-				if (file_exists($target))
-					{
-					echo $target . " already exists. ";
-					}
-				else
-					{
-					# Move file to folder and write data to db
-					move_uploaded_file($_FILES["profile_image"]["tmp_name"],
-					$target);
-					$_POST['profile_image'] = $ran2.$ext;
-					$user_id = DB::instance(DB_NAME)->insert('users', $_POST);
-					Router::redirect("/users/login");
-					}
+			|| ($_FILES["profile_image"]["type"] == "image/jpeg")
+			|| ($_FILES["profile_image"]["type"] == "image/jpg")
+			|| ($_FILES["profile_image"]["type"] == "image/pjpeg")
+			|| ($_FILES["profile_image"]["type"] == "image/x-png")
+			|| ($_FILES["profile_image"]["type"] == "image/png"))
+			&& ($_FILES["profile_image"]["size"] < 1000000)
+			&& in_array($extension, $allowedExts)) {
+				if (file_exists($target)) {
+					# Regenerate Random Number for New Filename
+					$ran = rand ();
+					$ran2 = pathinfo(($_FILES['profile_image']['name']), PATHINFO_FILENAME) . $ran.".";
+					$target = "images/profile/";
+					$target = $target . $ran2.$ext;
 				}
-		else
-			{
+				# Move file to folder and write data to db
+				move_uploaded_file($_FILES["profile_image"]["tmp_name"], $target);
+				$_POST['profile_image'] = $ran2.$ext;
+
+				# Insert this user into the database and redirect to login page
+				$user_id = DB::instance(DB_NAME)->insert('users', $_POST);
+				Router::redirect("/users/login/success");
+				
+		} else {
 			echo "Invalid file";
-			}
+		}
 	}
 
-	public function login($error = NULL) {
+	public function login($error = NULL, $success = NULL) {
 		# Setup view
-			$this->template->content = View::instance('v_users_login');
-			$this->template->title   = "Login";
+		$this->template->content = View::instance('v_users_login');
+		$this->template->title   = "Login";
 			
 		# Pass data to the view
 		$this->template->content->error = $error;
+		$this->template->content->success = $success;
 
 		# Render template
-			echo $this->template;
+		echo $this->template;
 	}
 	
 	public function p_login() {
@@ -111,7 +111,6 @@
     else {
         setcookie("token", $token, strtotime('+2 weeks'), '/');
 				Router::redirect("/");
-	
 			}
 	}
 	
@@ -165,5 +164,45 @@
 		# Render template
 		echo $this->template;
 	}
+
+	public function p_profile() {
+		# More data we want stored with the user
+		       
+	
+		# If new password entered, encrypt and salt the password  
+			# Setup Image Restrictions
+			$allowedExts = array("gif", "jpeg", "jpg", "png");
+			$temp = explode(".", $_FILES["profile_image"]["name"]);
+			$extension = end($temp);
+			
+			# Rename File
+			$ext = pathinfo(($_FILES['profile_image']['name']), PATHINFO_EXTENSION); 
+			$ran = rand ();
+			$ran2 = pathinfo(($_FILES['profile_image']['name']), PATHINFO_FILENAME) . $ran.".";
+			$target = "images/profile/";
+			$target = $target . $ran2.$ext;
+			
+			# Check Image Restrictions
+			if ((($_FILES["profile_image"]["type"] == "image/gif")
+				|| ($_FILES["profile_image"]["type"] == "image/jpeg")
+				|| ($_FILES["profile_image"]["type"] == "image/jpg")
+				|| ($_FILES["profile_image"]["type"] == "image/pjpeg")
+				|| ($_FILES["profile_image"]["type"] == "image/x-png")
+				|| ($_FILES["profile_image"]["type"] == "image/png"))
+				&& ($_FILES["profile_image"]["size"] < 1000000)
+				&& in_array($extension, $allowedExts)) {
+					move_uploaded_file($_FILES["profile_image"]["tmp_name"], $target);
+				}
+				$data = Array(
+						"first_name" => $_POST['first_name'],
+						"last_name" => $_POST['last_name'],
+						"email" => $_POST['email'],
+						"profile_image" => $ran2.$ext,
+						"modified" => Time::now()
+						);
+				$where_condition = 'WHERE user_id = '.$this->user->user_id;
+				DB::instance(DB_NAME)->update('users', $data, $where_condition);
+        Router::redirect("/users/login/success");
+			}
 
 } # end of the class

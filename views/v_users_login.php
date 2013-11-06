@@ -1,3 +1,11 @@
+<!-- Submitted Sign Up Form Success -->
+    <?php if(isset($success)): ?>
+        <div class="error">
+            Registration succeeded. Please log in.
+        </div>
+        <br>
+    <?php endif; ?>
+    
 <!-- Login Form -->
 <form method='POST' name='login_form' action='/users/p_login'> 
   <fieldset>

@@ -1,4 +1,12 @@
 <?php foreach($profile as $profile): ?>
+  <div class="my_photo">
+  	<p class="label">Current Profile Photo</p>
+		<?php if(isset($comment['profile_image'])): ?>
+      <img class="circular" src="../images/profile/<?=$comment['profile_image']?>" />
+    <?php else: ?>
+      <img class="circular" src="../images/profile/stick-figure.jpg" />
+    <?php endif; ?>
+  </div>
   <form method='POST' name='signup_form' action='/users/p_profile'> 
     <fieldset>
       <legend>Edit Profile</legend>
@@ -18,8 +26,11 @@
         <label for="password" id="password_label">Update Password</label><br />
         <input type="password" name="password" id="password" size="38" value="" class="text-input" />
       </p>
-      <p>Insert Photo Upload</p>
-      <p class="center"><input type="submit" class="button" id="submit_btn" value="Sign Up" /></p>
+    <p>
+      <label for="profile_image" id="image_label">Upload a New Photo</label><br />
+      <input type="file" name="profile_image" id="profile_image" size="38" value="" />
+    </p>
+      <p class="center"><input type="submit" class="button" id="submit_btn" value="Edit Profile" /></p>
     </fieldset>  
   </form>
 <?php endforeach ?>
