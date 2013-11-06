@@ -7,20 +7,20 @@
 
 	public function index() {
 		# Setup view
-			$this->template->content = View::instance('v_index_index');
-			$this->template->title   = "Chipper Chirper";
+		$this->template->content = View::instance('v_index_index');
+		$this->template->title   = "Chipper Chirper";
 
 		# Render template
-			echo $this->template;
+		echo $this->template;
 	}
 
 	public function signup() {
 		# Setup view
-				$this->template->content = View::instance('v_users_signup');
-				$this->template->title   = "Sign Up";
+		$this->template->content = View::instance('v_users_signup');
+		$this->template->title   = "Sign Up";
 
 		# Render template
-				echo $this->template;
+		echo $this->template;
 	}
 	
 	public function p_signup() {
@@ -32,29 +32,46 @@
 		$_POST['password'] = sha1(PASSWORD_SALT.$_POST['password']);            
 		$_POST['token'] = sha1(TOKEN_SALT.$_POST['email'].Utils::generate_random_string());
 			
-		# This is the directory where images will be saved
-		$target = "pics/";
-		$target = $target.basename($_FILES['profile_image']['last_name']);
-
-		# This gets all the other information from the form
-		$_POST['profile_image'] = basename( $_FILES['profile_image']['last_name']);
-
-		# Writes the Filename to the server
-		if(move_uploaded_file($_FILES['profile_image']['last_name'], $target)) {
-
-			# Insert this user into the database
-			$user_id = DB::instance(DB_NAME)->insert('users', $_POST);
-	
-			# Send them to the main page
-			Router::redirect("/users/login");
-
-		} else {
-			
-			#Gives and error if its not
-			echo "Sorry, there was a problem uploading your file.";
-			echo "<pre>".print_r($_FILES)."</pre>";
-		}
-
+		# Setup Image Restrictions
+		$allowedExts = array("gif", "jpeg", "jpg", "png");
+		$temp = explode(".", $_FILES["profile_image"]["name"]);
+		$extension = end($temp);
+		
+		# Rename File
+		$ext = pathinfo(($_FILES['profile_image']['name']), PATHINFO_EXTENSION); 
+		$ran = rand ();
+		$ran2 = pathinfo(($_FILES['profile_image']['name']), PATHINFO_FILENAME) . $ran.".";
+		$target = "images/profile/";
+		$target = $target . $ran2.$ext;
+		
+		# Check Image Restrictions
+		if ((($_FILES["profile_image"]["type"] == "image/gif")
+		|| ($_FILES["profile_image"]["type"] == "image/jpeg")
+		|| ($_FILES["profile_image"]["type"] == "image/jpg")
+		|| ($_FILES["profile_image"]["type"] == "image/pjpeg")
+		|| ($_FILES["profile_image"]["type"] == "image/x-png")
+		|| ($_FILES["profile_image"]["type"] == "image/png"))
+		&& ($_FILES["profile_image"]["size"] < 1000000)
+		&& in_array($extension, $allowedExts))
+			{
+				if (file_exists($target))
+					{
+					echo $target . " already exists. ";
+					}
+				else
+					{
+					# Move file to folder and write data to db
+					move_uploaded_file($_FILES["profile_image"]["tmp_name"],
+					$target);
+					$_POST['profile_image'] = $ran2.$ext;
+					$user_id = DB::instance(DB_NAME)->insert('users', $_POST);
+					Router::redirect("/users/login");
+					}
+				}
+		else
+			{
+			echo "Invalid file";
+			}
 	}
 
 	public function login($error = NULL) {
@@ -127,11 +144,26 @@
 		# If they weren't redirected away, continue:
 
 		# Setup view
-			$this->template->content = View::instance('v_users_profile');
-			$this->template->title   = "Profile of".$this->user->first_name;
+		$this->template->content = View::instance('v_users_profile');
+		$this->template->title   = "Profile of ".$this->user->first_name;
+			
+		# Query user
+		$q = 'SELECT 
+						users.first_name,
+						users.last_name,
+						users.email,
+						users.profile_image
+				FROM users
+				WHERE users.user_id = '.$this->user->user_id;
+
+		# Run posts query, store the results in the variable $profile
+		$profile = DB::instance(DB_NAME)->select_rows($q);
+
+		# Pass data to the View
+		$this->template->content->profile = $profile;
 
 		# Render template
-			echo $this->template;
+		echo $this->template;
 	}
 
 } # end of the class

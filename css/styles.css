@@ -127,7 +127,7 @@ a:link, a:visited, a:hover, a:active {
 	text-decoration: none;
 }
 
-/* Posts */
+/* Posts and Comments*/
 
 form.addPost {
 	float:right;
@@ -135,11 +135,7 @@ form.addPost {
 }
 
 article {
-	margin: 10px 10px 10px 10px;
-}
-
-article .posts {
-	margin-left: 50px;
+	margin: 0px 5px 10px 0px;
 }
 
 .posted_by{
@@ -152,9 +148,15 @@ article .posts {
 
 .user_post {
 	background-color: #BFDAF5;
-	padding: 1px 15px 15px 15px;
+	padding: 1px 15px 15px 35px;
+	margin-left: 50px;
 	font-size: .9em;
 	border-radius: 10px;
+}
+
+.comment_form {
+	clear:both;
+	margin-bottom:-15px;
 }
 
 .comment_by{
@@ -167,13 +169,14 @@ article .posts {
 
 .post_comment {
 	background-color: #CAFFCA;
-	padding: 1px 15px 15px 15px;
+	padding: 1px 15px 18px 15px;
 	font-size: 0.9em;
 	border-radius: 10px;
+	margin-right: 35px;
 }
 
 .has_comment {
-	width: 52%;
+	width: 54%;
 	float: left;
 }
 
@@ -186,8 +189,29 @@ article .posts {
 article time {
 	font-size: .7em;
 	font-style: italic;
-	margin-top: -5px;
+	margin-top: -9px;
 	float: right;
+}
+
+.circular {
+	border-radius: 150px;
+	-webkit-border-radius: 150px;
+	-moz-border-radius: 150px;
+	border: 1px solid #bfbdb2;
+}
+
+.posts .circular {
+	width: 75px;
+	height: 75px;
+	float: left;
+	margin: 5px 10px 10px 0px;
+}
+
+.comments .circular {
+	width: 60px;
+	height: 60px;
+	float: right;
+	margin: -7px 0px 0px;
 }
 
 /* User List */

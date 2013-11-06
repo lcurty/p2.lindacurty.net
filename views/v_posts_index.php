@@ -7,8 +7,10 @@
 <?php foreach($posts as $post): ?>
 
 
-  <article class="posts<?php foreach($comment_count AS $this_count): ?><?php if($this_count['post_id'] == $post['post_id']): ?> has_comment<?php endif ?><?php endforeach; ?>">
-  
+  <article class="posts<?php foreach($has_comment AS $show_comments): ?><?php if($show_comments['post_id'] == $post['post_id']): ?> has_comment<?php endif ?><?php endforeach; ?>">
+
+			<div><img class="circular" src="../images/profile/<?=$comment['profile_image']?>" /></div>
+
       <p class="posted_by"><?=$post['first_name']?> <?=$post['last_name']?></p>
   
       <div class="user_post">
@@ -19,41 +21,50 @@
             <?=Time::display($post['created'])?>
         </time>
         
-        <?php include 'v_posts_comment.php' ?>
+        <div class="comment_form"><?php include 'v_posts_comment.php' ?></div>
         
       </div>
     
   </article>
  
 
-
-  <div class="comment_box">
+	<?php foreach($has_comment AS $show_comments): ?>
   
-		<!-- Loop through comments for each post -->
+    <?php if($show_comments['post_id'] == $post['post_id']): ?>
   
-    <?php foreach($comments AS $comment): ?>
+      <div class="comment_box">
       
-      <?php if($comment['post_id'] == $post['post_id']): ?>
-                  
-        <article class="comments">
-  
-          <div class="post_comment">
-    
-            <p><span class="comment_by"><?=$comment['first_name']?> <?=$comment['last_name']?></span> &ndash; <?=$comment['comment']?></p>
-
-            <time datetime="<?=Time::display($comment['created'],'Y-m-d G:i')?>">
-                <?=Time::display($comment['created'])?>
-            </time>
-    
-          </div>
+        <!-- Loop through comments for each post -->
+      
+        <?php foreach($comments AS $comment): ?>
+          
+          <?php if($comment['post_id'] == $post['post_id']): ?>
+                      
+            <article class="comments">
+            
+							<div><img class="circular" src="../images/profile/<?=$comment['profile_image']?>" /></div>
+      
+              <div class="post_comment">
         
-        </article>
-  
-      <?php endif; ?>
+                <p><span class="comment_by"><?=$comment['first_name']?> <?=$comment['last_name']?></span> &ndash; <?=$comment['comment']?></p>
     
-    <?php endforeach; ?>
-  
-  </div>
+                <time datetime="<?=Time::display($comment['created'],'Y-m-d G:i')?>">
+                    <?=Time::display($comment['created'])?>
+                </time>
+        
+              </div>
+            
+            </article>
+      
+          <?php endif; ?>
+        
+        <?php endforeach; ?>
+      
+      </div>
+    
+    <?php endif ?>
+		
+	<?php endforeach; ?>
   
   <hr class="clear" />
 

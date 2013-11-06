@@ -1,4 +1,4 @@
-<form method='POST' name='signup_form' action='/users/p_signup'> 
+<form method='POST' name='signup_form' action='/users/p_signup'enctype="multipart/form-data"> 
   <fieldset>
   	<legend>Sign Up</legend>
     <p>
