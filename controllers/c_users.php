@@ -2,7 +2,7 @@
 	class users_controller extends base_controller {
 
 	public function __construct() {
-			parent::__construct();
+		parent::__construct();
 	} 
 
 	public function index() {
@@ -54,17 +54,51 @@
 				|| ($_FILES["profile_image"]["type"] == "image/pjpeg")
 				|| ($_FILES["profile_image"]["type"] == "image/x-png")
 				|| ($_FILES["profile_image"]["type"] == "image/png"))
-				&& ($_FILES["profile_image"]["size"] < 1000000)
-				&& in_array($extension, $allowedExts)) {
+				&& in_array($ext, $allowedExts)) {
 					if (file_exists($target)) {
+						
 						# Regenerate Random Number for New Filename
 						$ran = rand ();
 						$ran2 = pathinfo(($_FILES['profile_image']['name']), PATHINFO_FILENAME) . $ran.".";
 						$target = "images/profile/";
 						$target = $target . $ran2.$ext;
 					}
-					# Move file to folder and write data to db
-					move_uploaded_file($_FILES["profile_image"]["tmp_name"], $target);
+					
+					# Resize and crop image
+					$crop_image = ($_FILES['profile_image']['tmp_name']);
+					header($_FILES["profile_image"]["type"]);
+					if ($ext == "gif") {
+						$myImage = imagecreatefromgif($crop_image);
+					} elseif (($ext == "jpg") || ($ext == "jpeg")){
+						$myImage = imagecreatefromjpeg($crop_image);
+					} elseif ($ext == "png") {
+						$myImage = imagecreatefrompng($crop_image);
+					}
+					list($width, $height) = getimagesize($crop_image);
+					if ($width > $height) {
+						$y = 0;
+						$x = ($width - $height) / 2;
+						$smallestSide = $height;
+					} else {
+						$x = 0;
+						$y = ($height - $width) / 2;
+						$smallestSide = $width;
+					}
+					$thumbSize = 100;
+					$thumb = imagecreatetruecolor($thumbSize, $thumbSize);
+					imagecopyresampled($thumb, $myImage, 0, 0, $x, $y, $thumbSize, $thumbSize, $smallestSide, $smallestSide);
+					
+					# Move file to folder
+					header($_FILES["profile_image"]["type"]);
+					if ($ext == "gif") {
+						imagegif($thumb, $target);
+					} elseif (($ext == "jpeg") || ($ext == "jpg")){
+						imagejpeg($thumb, $target);
+					} elseif ($ext == "png") {
+						imagepng($thumb, $target);
+					}
+				
+					# Send to Database
 					$_POST['profile_image'] = $ran2.$ext;
 	
 			} else {
@@ -75,7 +109,6 @@
 		# Insert this user into the database and redirect to login page
 		$user_id = DB::instance(DB_NAME)->insert('users', $_POST);
 		Router::redirect("/users/login/success");
-
 	}
 
 	public function login($error = NULL, $success = NULL) {
@@ -92,15 +125,13 @@
 	}
 	
 	public function p_login() {
-		
 		# Sanitize the user entered data to prevent any funny-business (re: SQL Injection Attacks)
 			$_POST = DB::instance(DB_NAME)->sanitize($_POST);
 	
 		# Hash submitted password so we can compare it against one in the db
 			$_POST['password'] = sha1(PASSWORD_SALT.$_POST['password']);
 	
-		# Search the db for this email and password
-		# Retrieve the token if it's available
+		# Search the db for this email and password, retrieve the token if it's available
 			$q = "SELECT token 
 				FROM users 
 				WHERE email = '".$_POST['email']."' 
@@ -122,92 +153,17 @@
 	public function logout() {
 		# Generate and save a new token for next login
     	$new_token = sha1(TOKEN_SALT.$this->user->email.Utils::generate_random_string());
-
-    # Create the data array we'll use with the update method
-    # In this case, we're only updating one field, so our array only has one entry
     	$data = Array("token" => $new_token);
 
     # Do the update
     	DB::instance(DB_NAME)->update("users", $data, "WHERE token = '".$this->user->token."'");
 
-    # Delete their token cookie by setting it to a date in the past - effectively logging them out
+    # Delete their token cookie
     	setcookie("token", "", strtotime('-1 year'), '/');
 
     # Send them back to the main index.
     	Router::redirect("/");
 
 	}
-
-	public function profile() {
-
-		# If user is blank, they're not logged in; redirect them to the login page
-			if(!$this->user) {
-				Router::redirect('/users/login');
-			}
-
-		# If they weren't redirected away, continue:
-
-		# Setup view
-		$this->template->content = View::instance('v_users_profile');
-		$this->template->title   = "Profile of ".$this->user->first_name;
-			
-		# Query user
-		$q = 'SELECT 
-						users.first_name,
-						users.last_name,
-						users.email,
-						users.profile_image
-				FROM users
-				WHERE users.user_id = '.$this->user->user_id;
-
-		# Run posts query, store the results in the variable $profile
-		$profile = DB::instance(DB_NAME)->select_rows($q);
-
-		# Pass data to the View
-		$this->template->content->profile = $profile;
-
-		# Render template
-		echo $this->template;
-	}
-
-	public function p_profile() {
-		# More data we want stored with the user
-		       
-	
-		# If new password entered, encrypt and salt the password  
-			# Setup Image Restrictions
-			$allowedExts = array("gif", "jpeg", "jpg", "png");
-			$temp = explode(".", $_FILES["profile_image"]["name"]);
-			$extension = end($temp);
-			
-			# Rename File
-			$ext = pathinfo(($_FILES['profile_image']['name']), PATHINFO_EXTENSION); 
-			$ran = rand ();
-			$ran2 = pathinfo(($_FILES['profile_image']['name']), PATHINFO_FILENAME) . $ran.".";
-			$target = "images/profile/";
-			$target = $target . $ran2.$ext;
-			
-			# Check Image Restrictions
-			if ((($_FILES["profile_image"]["type"] == "image/gif")
-				|| ($_FILES["profile_image"]["type"] == "image/jpeg")
-				|| ($_FILES["profile_image"]["type"] == "image/jpg")
-				|| ($_FILES["profile_image"]["type"] == "image/pjpeg")
-				|| ($_FILES["profile_image"]["type"] == "image/x-png")
-				|| ($_FILES["profile_image"]["type"] == "image/png"))
-				&& ($_FILES["profile_image"]["size"] < 1000000)
-				&& in_array($extension, $allowedExts)) {
-					move_uploaded_file($_FILES["profile_image"]["tmp_name"], $target);
-				}
-				$data = Array(
-						"first_name" => $_POST['first_name'],
-						"last_name" => $_POST['last_name'],
-						"email" => $_POST['email'],
-						"profile_image" => $ran2.$ext,
-						"modified" => Time::now()
-						);
-				$where_condition = 'WHERE user_id = '.$this->user->user_id;
-				DB::instance(DB_NAME)->update('users', $data, $where_condition);
-        Router::redirect("/users/login/success");
-			}
 
 } # end of the class

@@ -155,7 +155,6 @@ article {
 }
 
 .comment_form {
-	clear:both;
 	margin-bottom:-15px;
 }
 
@@ -221,17 +220,29 @@ article time {
 	margin: 5px 10px 10px 0px;
 }
 
-.comments .circular {
+.comments .circular,
+.users_table .circular {
 	width: 60px;
 	height: 60px;
-	float: right;
 	margin: -7px 0px 0px;
+}
+
+.comments .circular {
+	float: right;
 }
 
 /* User List */
 
-.follow_button {
-	background-color: #BFDAF5;
+.users_table {
+	border: 0px;
+}
+
+.users_table td {
+	padding: 4px 10px;
+}
+
+.button {
+	background-color: #e7e2c9;
 	padding: 4px 6px;
 	font-size: .8em;
 	font-weight: bold;

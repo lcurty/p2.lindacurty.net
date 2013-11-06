@@ -27,10 +27,8 @@
       
             <!-- Menu for users who are logged in -->
             <?php if($user): ?>
-      
+                <a href='/posts/users'>Follow Users</a>
                 <a href='/users/logout'>Logout</a>
-                <a href='/users/profile'>Profile</a>
-                <a href='/posts/users'>Users</a>
       
             <!-- Menu options for users who are not logged in -->
             <?php else: ?>

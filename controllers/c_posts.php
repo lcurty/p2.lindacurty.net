@@ -29,14 +29,13 @@
 								users.first_name,
 								users.last_name,
 								users.profile_image
-						FROM posts
-							LEFT JOIN users_users ON posts.user_id = users_users.user_id_followed
-							INNER JOIN users ON posts.user_id = users.user_id
-						WHERE users_users.user_id = '.$this->user->user_id.' 
+							FROM posts
+								LEFT JOIN users_users ON posts.user_id = users_users.user_id_followed
+								INNER JOIN users ON posts.user_id = users.user_id
+							WHERE users_users.user_id = '.$this->user->user_id.' 
 								OR posts.user_id = '.$this->user->user_id.'
-						ORDER BY posts.created DESC';
+							ORDER BY posts.created DESC';
 						
-		
 				# Run posts query, store the results in the variable $posts
 				$posts = DB::instance(DB_NAME)->select_rows($q);
 		
@@ -48,7 +47,7 @@
 								users.first_name,
 								users.last_name,
 								users.profile_image
-						FROM comments
+							FROM comments
 								LEFT JOIN posts ON comments.post_id = posts.post_id
 								LEFT JOIN users ON comments.user_id = users.user_id';
 		
@@ -61,8 +60,6 @@
 		
 				# Run the query, store the results in the variable $comment_count
 				$has_comment = DB::instance(DB_NAME)->select_rows($q);
-				
-				
 
 				# Pass data to the View
 				$this->template->content->posts = $posts;
@@ -110,33 +107,38 @@
 
 			public function users() {
                 
-			# Set up view
-			$this->template->content = View::instance("v_posts_users");
+				# Set up view
+				$this->template->content = View::instance("v_posts_users");
+				
+				# Set up query to get all users
+				$q = 'SELECT
+								user_id,
+								first_name,
+								last_name,
+								profile_image
+							FROM users
+							WHERE user_ID <> '.$this->user->user_id.'
+							ORDER BY first_name ASC, last_name ASC';
+								
+				# Run query
+				$users = DB::instance(DB_NAME)->select_rows($q);
+				
+				# Set up query to get all connections from users_users table
+				$q = 'SELECT user_id_followed
+							FROM users_users
+							WHERE user_id = '.$this->user->user_id;
+								
+				# Run query
+				$connections = DB::instance(DB_NAME)->select_array($q,'user_id_followed');
+				
+				# Pass data to the view
+				$this->template->content->users = $users;
+				$this->template->content->connections = $connections;
+				
+				# Render view
+				echo $this->template;
 			
-			# Set up query to get all users
-			$q = 'SELECT *
-						FROM users
-						WHERE user_ID <> '.$this->user->user_id;
-							
-			# Run query
-			$users = DB::instance(DB_NAME)->select_rows($q);
-			
-			# Set up query to get all connections from users_users table
-			$q = 'SELECT *
-						FROM users_users
-						WHERE user_id = '.$this->user->user_id;
-							
-			# Run query
-			$connections = DB::instance(DB_NAME)->select_array($q,'user_id_followed');
-			
-			# Pass data to the view
-			$this->template->content->users = $users;
-			$this->template->content->connections = $connections;
-			
-			# Render view
-			echo $this->template;
-			
-}	
+			}	
 			
 			public function follow($user_id_followed) {
 			
