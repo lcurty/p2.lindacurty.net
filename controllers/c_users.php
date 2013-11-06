@@ -14,16 +14,22 @@
 		echo $this->template;
 	}
 
-	public function signup() {
+	public function signup($error = NULL) {
 		# Setup view
 		$this->template->content = View::instance('v_users_signup');
 		$this->template->title   = "Sign Up";
+		
+		#Pass data to the view
+		$this->template->content->error = $error;
 
 		# Render template
 		echo $this->template;
 	}
 	
 	public function p_signup() {
+		# Check if unique email
+		# $_POST['email'] -> confirm_unique_email($email);
+		
 		# More data we want stored with the user
 		$_POST['created']  = Time::now();
 		$_POST['modified'] = Time::now();       
@@ -108,17 +114,16 @@
 		
 		# Insert this user into the database and redirect to login page
 		$user_id = DB::instance(DB_NAME)->insert('users', $_POST);
-		Router::redirect("/users/login/success");
+		Router::redirect("/users/login/signed-up");
 	}
 
-	public function login($error = NULL, $success = NULL) {
+	public function login($error = NULL) {
 		# Setup view
 		$this->template->content = View::instance('v_users_login');
 		$this->template->title   = "Login";
 			
 		# Pass data to the view
 		$this->template->content->error = $error;
-		$this->template->content->success = $success;
 
 		# Render template
 		echo $this->template;
@@ -141,7 +146,7 @@
 	
 		# Login failed
     if(!$token) {
-        Router::redirect("/users/login/error");
+        Router::redirect("/users/login/login-failed");
     }
     # Login passed
     else {

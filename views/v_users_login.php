@@ -1,5 +1,5 @@
 <!-- Submitted Sign Up Form Success -->
-    <?php if(isset($success)): ?>
+    <?php if(isset($error) && $error == 'signed-up'): ?>
         <div class="error">
             Registration succeeded. Please log in.
         </div>
@@ -22,7 +22,7 @@
     </p>
 
 <!-- Submitted Error -->
-    <?php if(isset($error)): ?>
+    <?php if(isset($error) && $error == 'login-failed'): ?>
         <div class="error">
             Login failed. Please double check your email and password.
         </div>

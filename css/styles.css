@@ -38,7 +38,7 @@ body {
 
 #logged_out #outer {
 	margin-top: 20px;
-	width: 600px;
+	width: 1000px;
 	border-width: 7px;
 	border-radius: 20px;
 }
@@ -52,15 +52,18 @@ body {
 	border-radius: 15px;
 }
 
-#logged_in .clear,
-hr .clear {
+.clear {
 	clear: both;
 	visibility: hidden;
 	margin: 2px;
 }
 
-#logged_out .clear {
-	visibility: hidden;
+.left {
+	float: left;
+}
+
+.right {
+	float: right;
 }
 
 /* Header */
@@ -69,7 +72,6 @@ header {
 }
 
 header img {
-	float: left;
 	margin: -10px 50px 5px 5px;	
 }
 
@@ -95,6 +97,7 @@ label, .label {
 	font-size: .9em;
 	font-weight: bold;
   text-shadow: 1px 1px 0px #d1d1d1;
+	width: 100px;
 }
 
 #switch-link {
@@ -102,10 +105,10 @@ label, .label {
 	font-size: .9em;
 	font-weight: bold;
   text-shadow: 1px 1px 0px #d1d1d1;
-	float: right;
 	text-decoration: none;
 	color: #514c49;
 	margin: 10px;
+	margin-left: 265px;
 }
 
 /* Navigation */
@@ -147,10 +150,10 @@ article {
 }
 
 .user_post {
-	background-color: #BFDAF5;
+	background-color: #E6F0FB;
 	padding: 1px 15px 15px 35px;
 	margin-left: 50px;
-	font-size: .9em;
+	font-size: 0.9em;
 	border-radius: 10px;
 }
 
@@ -167,7 +170,7 @@ article {
 }
 
 .post_comment {
-	background-color: #CAFFCA;
+	background-color: #EEFEDE;
 	padding: 1px 15px 18px 15px;
 	font-size: 0.9em;
 	border-radius: 10px;

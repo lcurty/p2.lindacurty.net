@@ -41,8 +41,8 @@
         </nav>
         
       	<header>
-        	<img src="/images/chuck-logo.png">
-          
+          <img src="/images/chipper-chirper.png">
+        	<img class="left" src="/images/chuck-logo.png">
         </header>
   
         <?php if(isset($content)) echo $content; ?>
