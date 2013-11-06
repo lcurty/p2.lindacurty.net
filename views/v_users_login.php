@@ -5,6 +5,11 @@
         </div>
         <br>
     <?php endif; ?>
+
+<p>
+  Welcome to the The Chipper Chirpper: A place to discuss all things happy.<br />
+  Now with ability to comment to posts and upload profile pictures.
+</p>
     
 <!-- Login Form -->
 <form method='POST' name='login_form' action='/users/p_login'> 
@@ -37,3 +42,4 @@
 <div id="switch-link">
   <p><a href="/users/signup">I want to join ... sign me up!</a></p>
 </div>
+
