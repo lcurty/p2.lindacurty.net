@@ -6,10 +6,15 @@
 <!-- Loop through posts for user and all follows -->
 <?php foreach($posts as $post): ?>
 
-
   <article class="posts<?php foreach($has_comment AS $show_comments): ?><?php if($show_comments['post_id'] == $post['post_id']): ?> has_comment<?php endif ?><?php endforeach; ?>">
 
-			<div><img class="circular" src="../images/profile/<?=$comment['profile_image']?>" /></div>
+			<div>
+				<?php if(isset($comment['profile_image'])): ?>
+        	<img class="circular" src="../images/profile/<?=$comment['profile_image']?>" />
+        <?php else: ?>
+        	<img class="circular" src="../images/profile/stick-figure.jpg" />
+        <?php endif; ?>
+      </div>
 
       <p class="posted_by"><?=$post['first_name']?> <?=$post['last_name']?></p>
   
@@ -42,7 +47,13 @@
                       
             <article class="comments">
             
-							<div><img class="circular" src="../images/profile/<?=$comment['profile_image']?>" /></div>
+            <div>
+              <?php if(isset($comment['profile_image'])): ?>
+                <img class="circular" src="../images/profile/<?=$comment['profile_image']?>" />
+              <?php else: ?>
+                <img class="circular" src="../images/profile/stick-figure.jpg" />
+              <?php endif; ?>
+            </div>
       
               <div class="post_comment">
         
