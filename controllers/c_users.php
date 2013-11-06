@@ -31,46 +31,51 @@
 		# Encrypt and salt the password  
 		$_POST['password'] = sha1(PASSWORD_SALT.$_POST['password']);            
 		$_POST['token'] = sha1(TOKEN_SALT.$_POST['email'].Utils::generate_random_string());
+		
+		# Check if image added
+		if(isset($_FILES['profile_image']['name']) && ($_FILES['profile_image']['name'] != "")){
 			
-		# Setup Image Restrictions
-		$allowedExts = array("gif", "jpeg", "jpg", "png");
-		$temp = explode(".", $_FILES["profile_image"]["name"]);
-		$extension = end($temp);
-		
-		# Rename File
-		$ext = pathinfo(($_FILES['profile_image']['name']), PATHINFO_EXTENSION); 
-		$ran = rand ();
-		$ran2 = pathinfo(($_FILES['profile_image']['name']), PATHINFO_FILENAME) . $ran.".";
-		$target = "images/profile/";
-		$target = $target . $ran2.$ext;
-		
-		# Check Image Restrictions
-		if ((($_FILES["profile_image"]["type"] == "image/gif")
-			|| ($_FILES["profile_image"]["type"] == "image/jpeg")
-			|| ($_FILES["profile_image"]["type"] == "image/jpg")
-			|| ($_FILES["profile_image"]["type"] == "image/pjpeg")
-			|| ($_FILES["profile_image"]["type"] == "image/x-png")
-			|| ($_FILES["profile_image"]["type"] == "image/png"))
-			&& ($_FILES["profile_image"]["size"] < 1000000)
-			&& in_array($extension, $allowedExts)) {
-				if (file_exists($target)) {
-					# Regenerate Random Number for New Filename
-					$ran = rand ();
-					$ran2 = pathinfo(($_FILES['profile_image']['name']), PATHINFO_FILENAME) . $ran.".";
-					$target = "images/profile/";
-					$target = $target . $ran2.$ext;
-				}
-				# Move file to folder and write data to db
-				move_uploaded_file($_FILES["profile_image"]["tmp_name"], $target);
-				$_POST['profile_image'] = $ran2.$ext;
-
-				# Insert this user into the database and redirect to login page
-				$user_id = DB::instance(DB_NAME)->insert('users', $_POST);
-				Router::redirect("/users/login/success");
-				
-		} else {
-			echo "Invalid file";
+			# Setup Image Restrictions
+			$allowedExts = array("gif", "jpeg", "jpg", "png");
+			$temp = explode(".", $_FILES["profile_image"]["name"]);
+			$extension = end($temp);
+			
+			# Rename File
+			$ext = pathinfo(($_FILES['profile_image']['name']), PATHINFO_EXTENSION); 
+			$ran = rand ();
+			$ran2 = pathinfo(($_FILES['profile_image']['name']), PATHINFO_FILENAME) . $ran.".";
+			$target = "images/profile/";
+			$target = $target . $ran2.$ext;
+			
+			# Check Image Restrictions
+			if ((($_FILES["profile_image"]["type"] == "image/gif")
+				|| ($_FILES["profile_image"]["type"] == "image/jpeg")
+				|| ($_FILES["profile_image"]["type"] == "image/jpg")
+				|| ($_FILES["profile_image"]["type"] == "image/pjpeg")
+				|| ($_FILES["profile_image"]["type"] == "image/x-png")
+				|| ($_FILES["profile_image"]["type"] == "image/png"))
+				&& ($_FILES["profile_image"]["size"] < 1000000)
+				&& in_array($extension, $allowedExts)) {
+					if (file_exists($target)) {
+						# Regenerate Random Number for New Filename
+						$ran = rand ();
+						$ran2 = pathinfo(($_FILES['profile_image']['name']), PATHINFO_FILENAME) . $ran.".";
+						$target = "images/profile/";
+						$target = $target . $ran2.$ext;
+					}
+					# Move file to folder and write data to db
+					move_uploaded_file($_FILES["profile_image"]["tmp_name"], $target);
+					$_POST['profile_image'] = $ran2.$ext;
+	
+			} else {
+				echo "Invalid file";
+			}
 		}
+		
+		# Insert this user into the database and redirect to login page
+		$user_id = DB::instance(DB_NAME)->insert('users', $_POST);
+		Router::redirect("/users/login/success");
+
 	}
 
 	public function login($error = NULL, $success = NULL) {
