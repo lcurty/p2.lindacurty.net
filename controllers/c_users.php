@@ -28,7 +28,15 @@
 	
 	public function p_signup() {
 		# Check if unique email
-		# $_POST['email'] -> confirm_unique_email($email);
+		$q = "SELECT token
+					FROM users
+					WHERE email = '".$_POST['email']."'";
+					
+		$token = DB::instance(DB_NAME)->select_field($q);
+		
+		if($token) {
+				Router::redirect("/users/signup/email-exists");
+		}
 		
 		# More data we want stored with the user
 		$_POST['created']  = Time::now();

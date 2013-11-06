@@ -1,6 +1,18 @@
 <form method='POST' name='signup_form' action='/users/p_signup'enctype="multipart/form-data"> 
   <fieldset>
-  	<legend>Sign Up</legend>
+    <legend>Sign Up</legend>
+ 		<?php if(isset($error) && $error == 'blank-fields'): ?>
+        <div class='error'>
+            Signup Failed. All fields are required.
+        </div>
+    <?php endif; ?>
+
+    <?php if(isset($error) && $error == 'email-exists'): ?>
+        <div class='error'>
+            There is already an account associated with this email. 
+            <a href="/users/login">Login</a>
+        </div>
+    <?php endif; ?>  	
     <p>
       <label for="first_name" id="first_name_label">First Name*</label><br />
       <input type="text" name="first_name" id="first_name" size="38" required="required" message="Please enter a first name." />
